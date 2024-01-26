@@ -608,8 +608,6 @@ local term_buf = nil
 local term_win = nil
 
 function TermToggle(height)
-  local win_found = false
-
   -- Check if terminal window is valid and visible
   if term_win and vim.api.nvim_win_is_valid(term_win) then
     if vim.api.nvim_get_current_win() == term_win then

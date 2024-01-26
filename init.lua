@@ -326,6 +326,11 @@ vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnos
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
 
+-- Neotree keymaps
+vim.keymap.set('n', '<leader>E', ":Neotree action=focus source=filesystem toggle=true<cr>", { desc = 'Show (E)xplorer' })
+vim.keymap.set('n', '<leader>B', ":Neotree action=focus source=buffers toggle=true<cr>", { desc = 'Show (B)uffer'})
+vim.keymap.set('n', '<leader>S', ":Neotree action=focus source=git_status toggle=true<cr>", { desc = 'Show Git (S)tatus'})
+
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
 local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })

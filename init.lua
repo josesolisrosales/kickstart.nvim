@@ -20,6 +20,8 @@ vim.opt.rtp:prepend(lazypath)
 
 -- [[ Plugin installation and configuration] ]]
 require('lazy').setup({
+  -- Autosave
+  'Pocco81/auto-save.nvim',
   -- Git related plugins
   'tpope/vim-fugitive',
   'tpope/vim-rhubarb',
@@ -144,10 +146,10 @@ require('lazy').setup({
 
   {
     -- Theme inspired by Atom
-    'navarasu/onedark.nvim',
+    'folke/tokyonight.nvim',
     priority = 1000,
     config = function()
-      vim.cmd.colorscheme 'onedark'
+      vim.cmd.colorscheme 'tokyonight-moon'
     end,
   },
 
@@ -158,7 +160,7 @@ require('lazy').setup({
     opts = {
       options = {
         icons_enabled = true,
-        theme = 'onedark',
+        theme = 'tokyonight',
         component_separators = '|',
         section_separators = '',
       },
@@ -514,7 +516,7 @@ local servers = {
   gopls = {},
   tflint= {},
   pyright = {},
-  -- rust_analyzer = {},
+  rust_analyzer = {},
   tsserver = {},
   html = { filetypes = { 'html', 'twig', 'hbs'} },
 

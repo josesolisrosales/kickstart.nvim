@@ -146,10 +146,10 @@ require('lazy').setup({
 
   {
     -- Theme inspired by Atom
-    'folke/tokyonight.nvim',
+    'Mofiqul/dracula.nvim',
     priority = 1000,
     config = function()
-      vim.cmd.colorscheme 'tokyonight-moon'
+      vim.cmd.colorscheme 'dracula'
     end,
   },
 
@@ -160,7 +160,7 @@ require('lazy').setup({
     opts = {
       options = {
         icons_enabled = true,
-        theme = 'tokyonight',
+        theme = 'dracula',
         component_separators = '|',
         section_separators = '',
       },

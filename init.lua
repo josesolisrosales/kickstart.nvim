@@ -13,10 +13,10 @@ vim.g.have_nerd_font = true
 
 -- Make line numbers default
 vim.o.number = true
--- You can also add relative line numbers, to help with jumping.
--- vim.o.relativenumber = true
+-- Line relative number to jump up and down quickly
+vim.o.relativenumber = true
 
--- Enable mouse mode, can be useful for resizing splits for example!
+-- Enable mouse mode, useful for resizing splits
 vim.o.mouse = 'a'
 
 -- Don't show the mode, since it's already in the status line
@@ -24,8 +24,6 @@ vim.o.showmode = false
 
 -- Sync clipboard between OS and Neovim.
 -- Schedule the setting after `UiEnter` because it can increase startup-time.
--- Remove this option if you want your OS clipboard to remain independent.
--- See `:help 'clipboard'`
 vim.schedule(function()
   vim.o.clipboard = 'unnamedplus'
 end)
@@ -57,14 +55,14 @@ vim.o.splitbelow = true
 vim.o.list = true
 vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
--- Preview substitutions live, as you type!
+-- Preview substitutions live
 vim.o.inccommand = 'split'
 
 -- Show which line your cursor is on
 vim.o.cursorline = true
 
 -- Minimal number of screen lines to keep above and below the cursor.
-vim.o.scrolloff = 10
+vim.o.scrolloff = 20
 
 -- Confirm before closing unsaved buffers
 vim.o.confirm = true
@@ -144,18 +142,17 @@ require('lazy').setup({
       enabled = true,
       execution_message = {
         message = function()
-          return ("AutoSave: saved at " .. vim.fn.strftime("%H:%M:%S"))
+          return ('AutoSave: saved at ' .. vim.fn.strftime '%H:%M:%S')
         end,
         dim = 0.18,
         cleaning_interval = 1250,
       },
-      trigger_events = {"InsertLeave", "TextChanged"},
+      trigger_events = { 'InsertLeave', 'TextChanged' },
       condition = function(buf)
         local fn = vim.fn
-        local utils = require("auto-save.utils.data")
-        
-        if fn.getbufvar(buf, "&modifiable") == 1 and
-           utils.not_in(fn.getbufvar(buf, "&filetype"), {}) then
+        local utils = require 'auto-save.utils.data'
+
+        if fn.getbufvar(buf, '&modifiable') == 1 and utils.not_in(fn.getbufvar(buf, '&filetype'), {}) then
           return true
         end
         return false
@@ -190,9 +187,18 @@ require('lazy').setup({
           BS = '<BS> ',
           Space = '<Space> ',
           Tab = '<Tab> ',
-          F1 = '<F1>', F2 = '<F2>', F3 = '<F3>', F4 = '<F4>',
-          F5 = '<F5>', F6 = '<F6>', F7 = '<F7>', F8 = '<F8>',
-          F9 = '<F9>', F10 = '<F10>', F11 = '<F11>', F12 = '<F12>',
+          F1 = '<F1>',
+          F2 = '<F2>',
+          F3 = '<F3>',
+          F4 = '<F4>',
+          F5 = '<F5>',
+          F6 = '<F6>',
+          F7 = '<F7>',
+          F8 = '<F8>',
+          F9 = '<F9>',
+          F10 = '<F10>',
+          F11 = '<F11>',
+          F12 = '<F12>',
         },
       },
       spec = {
@@ -343,7 +349,7 @@ require('lazy').setup({
 
           -- Document highlighting
           local client = vim.lsp.get_client_by_id(event.data.client_id)
-          if client and client.supports_method('textDocument/documentHighlight') then
+          if client and client.supports_method 'textDocument/documentHighlight' then
             local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
             vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
               buffer = event.buf,
@@ -367,7 +373,7 @@ require('lazy').setup({
           end
 
           -- Inlay hints
-          if client and client.supports_method('textDocument/inlayHint') then
+          if client and client.supports_method 'textDocument/inlayHint' then
             map('<leader>th', function()
               vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
             end, '[T]oggle Inlay [H]ints')
@@ -630,7 +636,7 @@ require('lazy').setup({
     'folke/todo-comments.nvim',
     event = 'VimEnter',
     dependencies = { 'nvim-lua/plenary.nvim' },
-    opts = { signs = false }
+    opts = { signs = false },
   },
 
   -- Collection of various small independent plugins/modules
@@ -664,7 +670,27 @@ require('lazy').setup({
     build = ':TSUpdate',
     main = 'nvim-treesitter.configs',
     opts = {
-      ensure_installed = { 'terraform', 'hcl', 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash', 'diff', 'html', 'markdown', 'markdown_inline', 'query' },
+      ensure_installed = {
+        'terraform',
+        'hcl',
+        'c',
+        'cpp',
+        'go',
+        'lua',
+        'python',
+        'rust',
+        'tsx',
+        'javascript',
+        'typescript',
+        'vimdoc',
+        'vim',
+        'bash',
+        'diff',
+        'html',
+        'markdown',
+        'markdown_inline',
+        'query',
+      },
       auto_install = true,
       highlight = {
         enable = true,
@@ -726,44 +752,6 @@ require('lazy').setup({
     },
   },
 
-  -- File tree - Neo-tree (your custom plugin)
-  {
-    "nvim-neo-tree/neo-tree.nvim",
-    version = "*",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "nvim-tree/nvim-web-devicons",
-      "MunifTanjim/nui.nvim",
-    },
-    config = function()
-      require('neo-tree').setup {}
-      
-      -- Your custom Neo-tree keymaps
-      vim.keymap.set('n', '<leader>E', ":Neotree action=focus source=filesystem toggle=true<cr>", { desc = 'Show (E)xplorer' })
-      vim.keymap.set('n', '<leader>B', ":Neotree action=focus source=buffers toggle=true<cr>", { desc = 'Show (B)uffer' })
-      vim.keymap.set('n', '<leader>S', ":Neotree action=focus source=git_status toggle=true<cr>", { desc = 'Show Git (S)tatus' })
-    end,
-  },
-
-  -- Autopairs
-  {
-    "windwp/nvim-autopairs",
-    dependencies = { 'saghen/blink.cmp' },
-    config = function()
-      require("nvim-autopairs").setup {}
-      
-      -- Integration with blink.cmp
-      local cmp_autopairs = require('nvim-autopairs.completion.cmp')
-      local cmp = require('blink.cmp')
-      if cmp.event then
-        cmp.event:on(
-          'confirm_done',
-          cmp_autopairs.on_confirm_done()
-        )
-      end
-    end,
-  },
-
   -- Import custom plugins
   { import = 'custom.plugins' },
 }, {
@@ -806,7 +794,7 @@ function TermToggle(height)
   end
 
   -- Terminal Window Creation
-  vim.cmd('botright new')
+  vim.cmd 'botright new'
   vim.api.nvim_win_set_height(0, height)
 
   -- Buffer Handling
@@ -816,7 +804,11 @@ function TermToggle(height)
     term_buf = vim.api.nvim_create_buf(false, true)
     vim.api.nvim_win_set_buf(0, term_buf)
     local shell = vim.o.shell -- Get default shell
-    vim.fn.termopen(shell, { on_exit = function() term_win = nil end })
+    vim.fn.termopen(shell, {
+      on_exit = function()
+        term_win = nil
+      end,
+    })
     term_win = vim.api.nvim_get_current_win()
     vim.api.nvim_buf_set_option(term_buf, 'buflisted', false)
     vim.api.nvim_win_set_option(0, 'number', false)
@@ -824,7 +816,7 @@ function TermToggle(height)
     vim.api.nvim_win_set_option(0, 'signcolumn', 'no')
   end
   -- Enter Insert Mode by default
-  vim.cmd('startinsert!')
+  vim.cmd 'startinsert!'
   term_win = vim.api.nvim_get_current_win()
 end
 
